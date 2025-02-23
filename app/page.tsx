@@ -1,6 +1,8 @@
 'use client';
 
+import { PenLine } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Frame from '../components/frame';
 
 interface Lyric {
   id: string;
@@ -247,69 +249,95 @@ export default function Home() {
 
   const renderContent = () => {
     return (
-      <div className="space-y-1">
-        {songLines.map((line, index) => {
-          const isOriginal = line.created_at === INITIAL_LINES[0].created_at;
+      <div className="relative">
+        {/* Line numbers column */}
+        <div className="absolute left-0 top-0 bottom-0 w-12 border-r border-gray-200 bg-gray-50 rounded-l-md" />
 
-          return (
-            <div key={line.id}>
-              <div className="flex items-start gap-4">
-                <span className="font-mono text-gray-400 text-sm select-none">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <p
-                  className={`font-mono text-base ${isOriginal ? '' : 'text-gray-600'} ${
-                    line.isRefrain ? 'pl-8' : ''
-                  }`}
-                >
-                  {line.lyric}
-                </p>
+        {/* Content */}
+        <div className="pl-16 pr-8 py-6 space-y-1">
+          {songLines.map((line, index) => {
+            const isOriginal = line.created_at === INITIAL_LINES[0].created_at;
+
+            return (
+              <div key={line.id}>
+                <div className="flex items-start gap-4">
+                  <span className="font-mono text-gray-400 text-sm select-none absolute left-4">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <p
+                    className={`font-mono text-base leading-relaxed ${
+                      isOriginal || line.isRefrain ? 'italic' : ''
+                    } `}
+                  >
+                    {line.lyric}
+                  </p>
+                </div>
+                {stanzaLengths.reduce((sum, s) => sum + s.length, 0) === index + 1 && (
+                  <div className="h-8" />
+                )}
               </div>
-              {stanzaLengths.reduce((sum, s) => sum + s.length, 0) === index + 1 && (
-                <div className="h-8" />
+            );
+          })}
+
+          {/* Inline generate button */}
+          <div className="flex items-center gap-4 pt-4">
+            <span className="font-mono text-gray-400 text-sm select-none absolute left-4">
+              {String(songLines.length + 1).padStart(2, '0')}
+            </span>
+            <button
+              type="button"
+              onClick={generateNewLine}
+              disabled={isGenerating}
+              className={`font-mono text-base text-left  ${
+                !isGenerating
+                  ? 'border-2 border-black px-2 py-1 rounded-md hover:text-white hover:bg-black'
+                  : ''
+              }`}
+            >
+              {isGenerating ? (
+                'Generating...'
+              ) : (
+                <span className="flex items-center gap-2">
+                  + Generate next line
+                  <PenLine className="w-4 h-4" />
+                </span>
               )}
-            </div>
-          );
-        })}
+            </button>
+          </div>
+          {error && <div className="text-sm text-red-600 mt-2 pl-16">{error}</div>}
+        </div>
       </div>
     );
   };
 
   return (
     <section className="flex flex-col gap-6 tracking-tight leading-snug">
-      <div className="text-2xl md:text-3xl">
-        <strong className="border-2 border-black px-1 rounded-sm">Desolation Rows</strong>
-      </div>
-
-      <div className="text-base md:text-xl flex flex-col gap-2">
-        <p>
-          An AI exploration of Bob Dylan's "A Hard Rain's A-Gonna Fall", generating new verses in
-          his style. Each stanza begins with two questions, followed by responses, and ends with the
-          iconic refrain.
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div
-          ref={scrollContainerRef}
-          className="h-[600px] overflow-y-auto border border-gray-200 rounded-md p-6 bg-white"
-        >
-          {renderContent()}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          {error && <div className="text-sm text-red-600">{error}</div>}
-
+      <Frame className="mb-6">
+        <div className="p-6 flex gap-4 items-start">
+          <p className="text-sm text-gray-600 flex-1">
+            An AI exploration of Bob Dylan's "A Hard Rain's A-Gonna Fall", generating new verses in
+            his style. Each stanza begins with two questions, followed by responses, and ends with
+            the iconic refrain.
+          </p>
           <button
             type="button"
-            onClick={generateNewLine}
-            disabled={isGenerating}
-            className="w-full py-3 px-4 bg-black text-white rounded-md hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-base"
+            className="text-sm border border-black px-3 py-1 rounded hover:bg-black hover:text-white transition-colors whitespace-nowrap"
           >
-            {isGenerating ? 'Writing...' : 'Write Next Line'}
+            Learn More
           </button>
         </div>
-      </div>
+      </Frame>
+
+      <Frame title="A Hard Rain's A-Gonna Fall" titleSize="md" className="flex-1">
+        <div className="p-6">
+          <div
+            ref={scrollContainerRef}
+            className=" max-h-[600px] overflow-y-auto border border-gray-200 rounded-md"
+          >
+            {renderContent()}
+          </div>
+        </div>
+      </Frame>
     </section>
   );
 }

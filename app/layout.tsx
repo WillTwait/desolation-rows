@@ -1,41 +1,74 @@
-import { GeistMono } from 'geist/font/mono';
-import { Crimson_Text } from 'next/font/google';
+import Layout from '@/components/layout';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
-const serif = Crimson_Text({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  variable: '--font-serif',
-});
+const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Desolation Rows',
-  description: "An AI exploration of Bob Dylan's 'A Hard Rain's A-Gonna Fall'",
+export const metadata: Metadata = {
+  metadataBase: new URL('https://desolation-rows.twait.dev'),
+  title: {
+    default: 'Desolation Rows',
+    template: '%s | Desolation Rows',
+  },
+  description: 'Desolation Rows',
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/icon.png',
+    },
+  },
+  openGraph: {
+    title: 'Desolation Rows',
+    description: 'Desolation Rows',
+    url: 'https://desolation-rows.twait.dev',
+    siteName: 'Desolation Rows',
+    locale: 'en_US',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  twitter: {
+    title: 'Desolation Rows',
+    card: 'summary_large_image',
+  },
+  verification: {
+    google: 'google',
+    yandex: 'yandex',
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${serif.variable} ${GeistMono.variable}`} suppressHydrationWarning>
-      <body className="bg-[#f4f1ea] text-gray-900 antialiased h-screen">
-        <main className="h-full flex flex-col">
-          <header className="py-8 text-center">
-            <h1 className="font-serif text-4xl mb-2">Desolation Rows</h1>
-            <p className="text-gray-600 italic">
-              An AI exploration of Bob Dylan&apos;s &quot;A Hard Rain&apos;s A-Gonna Fall&quot;
-            </p>
-          </header>
-          <div className="flex-1">{children}</div>
-          <footer className="py-4 text-center text-sm text-gray-600">
-            <p>
-              Inspired by Bob Dylan&apos;s quote: &quot;all of the lyrics were taken from the
-              initial lines of songs that he thought he would never have time to write.&quot;
-            </p>
-          </footer>
-        </main>
+    <html
+      lang="en"
+      className={`${inter.className} text-black bg-white dark:text-white dark:bg-black`}
+    >
+      <body className="antialiased">
+        <Layout>
+          {children}
+          {/* <Footer /> */}
+        </Layout>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
