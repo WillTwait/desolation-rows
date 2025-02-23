@@ -25,11 +25,11 @@ export default function Frame({
   return (
     <div className={`relative ${className}`}>
       {title && (
-        <p
+        <div
           className={`absolute left-6 font-bold bg-white px-2 py-1 translate-y-1/2 z-10 ${titleClassName}`}
         >
           {title}
-        </p>
+        </div>
       )}
       <div className={`rounded-xl border-2 border-black ${minHeight}`}>{children}</div>
     </div>

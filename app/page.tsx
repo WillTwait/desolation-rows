@@ -333,17 +333,13 @@ export default function Home() {
     <section className="flex flex-col gap-6 tracking-tight leading-snug">
       <Frame className="mb-6">
         <div className="p-6 flex gap-4 items-start">
-          <p className="text-sm text-gray-600 flex-1">
-            An AI exploration of Bob Dylan's "A Hard Rain's A-Gonna Fall", generating new verses in
-            his style. Each stanza begins with two questions, followed by responses, and ends with
-            the iconic refrain.
-          </p>
-          <button
+          <p className="text-sm text-gray-600 flex-1">Work in progress.</p>
+          {/* <button
             type="button"
             className="text-sm border border-black px-3 py-1 rounded hover:bg-black hover:text-white transition-colors whitespace-nowrap"
           >
             Learn More
-          </button>
+          </button> */}
         </div>
       </Frame>
 
