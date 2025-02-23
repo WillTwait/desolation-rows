@@ -204,7 +204,7 @@ export default function Home() {
           lyric: isLastLine
             ? "And it's a hard rain's a-gonna fall"
             : "And it's a hard, and it's a hard, it's a hard, it's a hard",
-          created_at: new Date().toISOString(),
+          created_at: new Date(1962, 12, 6).toISOString(),
           stanza: currentStanza,
           isRefrain: true,
         };
