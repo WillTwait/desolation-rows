@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS lyrics (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     lyric TEXT NOT NULL,
     is_question BOOLEAN NOT NULL DEFAULT FALSE,
-    question TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

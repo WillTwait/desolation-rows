@@ -1,5 +1,6 @@
 'use client';
 
+import { createClient } from '@/utils/supabase/client';
 import { PenLine } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Frame from '../components/frame';
@@ -79,7 +80,6 @@ const INITIAL_LINES: Lyric[] = [
 
 export default function Home() {
   const [songLines, setSongLines] = useState<Lyric[]>(INITIAL_LINES);
-  // Track current stanza we're working on (start with 2 since 1 is hardcoded)
   const [currentStanzaNumber, setCurrentStanzaNumber] = useState(2);
   const [stanzaLengths, setStanzaLengths] = useState<StanzaLength[]>([
     { stanza: 1, length: INITIAL_LINES.length },
@@ -87,7 +87,27 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  // const supabase = createClient();
+  const supabase = createClient();
+
+  const saveLyricToSupabase = async (lyric: Lyric) => {
+    try {
+      const { error } = await supabase.from('lyrics').insert({
+        id: lyric.id,
+        lyric: lyric.lyric,
+        is_question:
+          lyric.stanza > 1 &&
+          (getCurrentStanzaInfo().currentLength === 0 ||
+            getCurrentStanzaInfo().currentLength === 1),
+        created_at: lyric.created_at,
+      });
+
+      if (error) {
+        console.error('Error saving to Supabase:', error);
+      }
+    } catch (err) {
+      console.error('Error saving lyric:', err);
+    }
+  };
 
   const scrollToBottom = useCallback(() => {
     const container = scrollContainerRef.current;
@@ -171,6 +191,7 @@ export default function Home() {
           stanza: currentStanza,
         };
 
+        await saveLyricToSupabase(newLine);
         setSongLines((current) => [...current, newLine]);
         return;
       }
@@ -187,6 +208,8 @@ export default function Home() {
           stanza: currentStanza,
           isRefrain: true,
         };
+
+        await saveLyricToSupabase(newLine);
         setSongLines((current) => [...current, newLine]);
 
         // If this was the last line of the stanza, prepare for next stanza
@@ -198,20 +221,15 @@ export default function Home() {
 
       // Handle regular response lines
       const stanzaStart = previousStanzaEnds;
-
       const currentStanzaLyrics = songLines.slice(stanzaStart);
 
-      // Make sure we have lyrics and can access the question
       if (!currentStanzaLyrics.length) {
         throw new Error('Cannot find current stanza lyrics');
       }
 
-      // Get the first line (question) of the current stanza
       const currentStanzaQuestion = currentStanzaLyrics[0].lyric;
-
-      // Get all non-refrain lines after the questions
       const existingLyrics = currentStanzaLyrics
-        .slice(2) // Skip the two question lines
+        .slice(2)
         .filter((l) => !l.isRefrain)
         .map((l) => l.lyric);
 
@@ -238,6 +256,7 @@ export default function Home() {
         stanza: currentStanza,
       };
 
+      await saveLyricToSupabase(newLine);
       setSongLines((current) => [...current, newLine]);
     } catch (err) {
       console.error(err);
