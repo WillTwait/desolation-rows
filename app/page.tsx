@@ -280,20 +280,18 @@ export default function Home() {
             return (
               <div key={line.id}>
                 <div className="flex items-start gap-4">
-                  <span className="font-mono text-gray-400 text-sm select-none absolute left-4">
+                  <span className="font-mono text-gray-400 text-xs md:text-sm select-none absolute left-4">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <p
-                    className={`font-mono text-base leading-relaxed ${
+                    className={`font-mono text-xs md:text-base leading-relaxed ${
                       isOriginal || line.isRefrain ? 'italic' : ''
                     } `}
                   >
                     {line.lyric}
                   </p>
                 </div>
-                {stanzaLengths.reduce((sum, s) => sum + s.length, 0) === index + 1 && (
-                  <div className="h-8" />
-                )}
+                {line.isRefrain && line.lyric.includes('a-gonna fall') && <div className="h-6" />}
               </div>
             );
           })}
@@ -307,7 +305,7 @@ export default function Home() {
               type="button"
               onClick={generateNewLine}
               disabled={isGenerating}
-              className={`font-mono text-base text-left  ${
+              className={`font-mono  text-xs md:text-base text-left  ${
                 !isGenerating
                   ? 'border-2 border-black px-2 py-1 rounded-md hover:text-white hover:bg-black'
                   : ''
