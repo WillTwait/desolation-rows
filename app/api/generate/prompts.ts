@@ -1,4 +1,4 @@
-// Example questions that Dylan might ask
+// Example questions from original song
 const EXAMPLE_QUESTIONS = [
   'Oh, where have you been',
   'Oh, what did you see,',
@@ -7,7 +7,7 @@ const EXAMPLE_QUESTIONS = [
   'What did you find',
 ] as const;
 
-// Example responses to show the style
+// Example lyrics from original song
 const EXAMPLE_LYRICS = [
   "I've stumbled on the side of twelve misty mountains",
   'I saw a newborn baby with wild wolves all around it',

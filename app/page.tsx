@@ -344,7 +344,7 @@ export default function Home() {
       </Frame>
 
       <Frame title="A Hard Rain's A-Gonna Fall" titleSize="md" className="flex-1">
-        <div className="p-6">
+        <div className="pt-4 md:p-6">
           <div
             ref={scrollContainerRef}
             className=" max-h-[600px] overflow-y-auto border border-gray-200 rounded-md"
