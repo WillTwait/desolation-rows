@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import Frame from './frame';
 
@@ -19,24 +20,14 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Main Content Frame */}
           <div className={`relative 'h-[75vh]`}>
-            <Frame
-              title={
-                <div className="flex items-center gap-2">
-                  Desolation Rows
-                  <span className="font-normal"> {'/'} </span>
-                  <a
-                    href="https://twait.dev/projects"
-                    className="hover:text-emerald-500 hover:border-emerald-500 hover:border-2 hover:rounded-md px-1 py-0.5 text-base transition-colors text-emerald-600 cursor-pointer"
-                  >
-                    twait.dev
-                  </a>
-                </div>
-              }
-              titleSize="lg"
-              minHeight="min-h-[75vh]"
-            >
+            <Frame title="Desolation Rows" titleSize="lg" minHeight="min-h-[75vh]">
               <div className={`py-8 px-2 md:p-8 'h-full overflow-hidden`}>{children}</div>
             </Frame>
+            <div className="text-xs text-right font-mono tracking-tight mt-2">
+              <Link className="border-b border-black hover:border-b-[2px]" href="https://twait.dev">
+                Made by Will
+              </Link>
+            </div>
           </div>
         </div>
       </div>
